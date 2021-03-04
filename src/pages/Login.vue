@@ -32,7 +32,7 @@
 					class="btn btn-block" 
 					@click="login()" > 
 					<i class='fa fa-spin fa-spinner' v-if="loading"></i>
-						{{ loading ? 'Signing in...' : 'Login' }}
+						{{ loading ? ' signing in...' : 'Login' }}
 					</button>
 				</div>
 			</div>
@@ -55,7 +55,8 @@ export default {
 		return {
 			email: "",
 			password: "",
-			msg: "",
+			message: "", 
+			error: "",
 			loading: false
 		};
 	},
@@ -65,13 +66,23 @@ export default {
 				this.loading = true;
 				let email = this.email;
 				let password = this.password;
-				const response = await AuthService.login({ email, password } );
-				console.log(response);
-				this.msg = response.msg;
-				this.$store.dispatch("login", { email, password } )
-					.then(() => this.$router.push("/"))
-					.catch(err => console.log(err));
-					this.$noty.success('Login Successful...');
+				if(email == "" || password == ""){
+					this.$noty.error('All fields are required');
+					this.loading = false;
+				} else {
+					const response = await AuthService.login({ email, password } );
+					if(response.error){
+						this.$noty.error(response.error);
+						this.loading = false;
+					} else if(response.message){
+						this.$noty.error(response.message);
+						this.loading = false;
+					} else {
+						this.$store.dispatch("login", { email, password } )
+							.then(() => this.$router.push("/"))
+							.catch(err => console.log(err));
+					}
+				}
 			} 
 			catch (error) {
 				this.msg = error.response.data.msg;
