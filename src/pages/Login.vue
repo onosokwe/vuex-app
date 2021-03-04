@@ -63,17 +63,15 @@ export default {
 		async login() {
 			try {
 				this.loading = true;
-				const credentials = {
-					email: this.email,
-					password: this.password,
-				};
-				const response = await AuthService.login(credentials);
+				let email = this.email;
+				let password = this.password;
+				const response = await AuthService.login({ email, password } );
+				console.log(response);
 				this.msg = response.msg;
-				console.log(this.msg);
-				const token = response.access_token;
-				const user = response.user;
-				this.$store.dispatch("login", { token, user });
-				this.$router.push("/");
+				this.$store.dispatch("login", { email, password } )
+					.then(() => this.$router.push("/"))
+					.catch(err => console.log(err));
+					this.$noty.success('Login Successful...');
 			} 
 			catch (error) {
 				this.msg = error.response.data.msg;
