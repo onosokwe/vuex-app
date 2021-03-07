@@ -55,7 +55,7 @@ export default {
 		return {
 			email: "",
 			password: "",
-			message: "", 
+			message: " ", 
 			error: "",
 			loading: false
 		};
