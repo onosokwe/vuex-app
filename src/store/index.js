@@ -3,8 +3,10 @@ import Vue from 'vue'
 import Axios from 'axios'
 import createPersistedState from 'vuex-persistedstate'
 
+
 // Load Vuex
 Vue.use(Vuex)
+
 
 // Create App defaultState
 const getDefaultState = () => {
@@ -13,6 +15,7 @@ const getDefaultState = () => {
         user: {}
     };
 };
+
 
 // Create Store
 export default new Vuex.Store({
